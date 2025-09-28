@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Hinata IA</title>
+  <style>
+    body { font-family: Arial; max-width: 800px; margin: 40px auto; padding: 20px; }
+    input, button { width: 100%; padding: 12px; margin: 10px 0; font-size: 16px; }
+    button { background: #4CAF50; color: white; border: none; cursor: pointer; }
+    img { max-width: 100%; margin-top: 20px; }
+  </style>
+</head>
+<body>
+  <h1>🎨 Genera imágenes con IA</h1>
+  <input type="text" id="prompt" placeholder="Ej: un gato astronauta, estilo cartoon">
+  <button onclick="generar()">Generar</button>
+  <div id="resultado"></div>
+
+  <script>
+    async function generar() {
+      const prompt = document.getElementById("prompt").value;
+      const res = await fetch("/generar", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({ prompt })
+      });
+      const data = await res.json();
+      if (data.imagen) {
+        document.getElementById("resultado").innerHTML = `<img src="${data.imagen}">`;
+      } else {
+        alert("Error: " + data.error);
+      }
+    }
+  </script>
+</body>
+</html>
