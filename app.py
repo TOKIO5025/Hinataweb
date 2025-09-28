@@ -1,17 +1,16 @@
-@app.route("/chat", methods=["POST"])
-def chat():
-    data = request.get_json()
-    mensaje = data.get("mensaje", "").strip()
-    
-    if not mensaje:
-        return jsonify({"respuesta": "¿En qué puedo ayudarte?"}), 400
+from flask import Flask, request, jsonify
+from flask_cors import CORS
 
-    try:
-        output = replicate.run(
-            "meta/llama-3-8b-instruct",
-            input={"prompt": f"Responde como Hinata Hyuga de Naruto, de forma amable y tímida. Mensaje: {mensaje}"}
-        )
-        respuesta = "".join(output).strip()
-        return jsonify({"respuesta": respuesta})
-    except Exception as e:
-        return jsonify({"respuesta": "Lo siento, no pude procesar tu mensaje."}), 500
+app = Flask(__name__)
+CORS(app)
+
+@app.route('/api/ia', methods=['POST'])
+def ia():
+    data = request.get_json()
+    prompt = data.get("prompt", "")
+    # Aquí tu lógica de IA (ejemplo básico)
+    return jsonify({"respuesta": f"Tu escribiste: {prompt}"})
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000)
+    
